@@ -1,3 +1,3 @@
 # CliMADatasets
 
-Hosting the Climate Modeling Alliances Machine Learning datasets.
+Hosting the Climate Modeling Alliance's Machine Learning datasets.
