@@ -1,10 +1,9 @@
 module CliMADatasets
 
-
-
-export getobs, numobs # From MLUtils.jl
-
-
+using DataDeps
+using HDF5
+using MLDatasets
+using MLUtils
 
 include("datasets/turbulence_2d.jl")
 export Turbulence2D
