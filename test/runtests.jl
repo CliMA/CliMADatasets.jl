@@ -2,9 +2,21 @@ using CliMADatasets
 using Test
 
 @testset "CliMADatasets.jl" begin
-    @testset "Turbulence2D" begin
-        n_features = (512, 512)
+    @testset "CelebAHQ" begin
+        for split in (:train, :test)
+            for gender in (:male, :female)
+                for resolution in 2 .^ (5:8)
+                    d = CelebAHQ(split, resolution=resolution, gender=gender)
+                    @test d.split == split
+                    @test d.resolution == resolution
+                    @test d.gender == gender
+                    @test size(d[:])[1:2] == (resolution, resolution)
+                end
+            end
+        end
+    end
 
+    @testset "Turbulence2D" begin
         d = Turbulence2D(:train, resolution=:high)
         @test d.split == :train
         @test d.resolution == :high
