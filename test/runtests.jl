@@ -32,4 +32,24 @@ using Test
         @test d.features isa Array{Float32}
         @test size(d[:])[1:2] == (512, 512)
     end
+
+    @testset "Turbulence2DContext" begin
+        d = Turbulence2DContext(:train, resolution=512, wavenumber=2.0)
+        @test d.split == :train
+        @test d.resolution == 512
+        @test d.wavenumber == 2.0
+        @test size(d[:])[1:2] == (512, 512)
+
+        d = Turbulence2DContext(Float64, resolution=64, wavenumber=1.0)
+        @test d.split == :train
+        @test d.resolution == 64
+        @test d.wavenumber == 1.0
+        @test d.features isa Array{Float64}
+
+        d = Turbulence2DContext(split=:test, resolution=512, wavenumber=2.0)
+        @test d.split == :test
+        @test d.wavenumber == 2.0
+        @test d.features isa Array{Float32}
+        @test size(d[:])[1:2] == (512, 512)
+    end    
 end
