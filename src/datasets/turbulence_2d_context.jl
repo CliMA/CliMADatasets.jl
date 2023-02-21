@@ -18,12 +18,11 @@ end
 Just a two-dimensional turbulence dataset with context. The wavenumber specifies the context.
 Authors: Climate Modeling Alliance
 """
-struct Turbulence2DContext{L} <: MLDatasets.UnsupervisedDataset
+struct Turbulence2DContext <: MLDatasets.UnsupervisedDataset
     metadata::Dict{String,Any}
     split::Symbol
     resolution::Int
     features::Array{}
-    wavenumber::L
 end
 
 Turbulence2DContext(; split=:train, resolution=512, wavenumber=1.0, Tx=Float32, dir=nothing) = Turbulence2DContext(Tx, resolution, wavenumber, split; dir)
@@ -39,6 +38,9 @@ function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Real, split:
     @assert resolution ∈ [512, 64]
     @assert wavenumber ∈ [1.0, 2.0, 4.0, 8.0, 16.0]
     @assert split ∈ [:train, :test]
+    if resolution == 64 && wavenumber != 1.0
+        error("resolution $resolution must have wavenumber 1.0 only.")
+    end
 
     # local path extraction
     features_path = MLDatasets.datafile(DEPNAME, HDF5FILE, dir)
@@ -49,16 +51,43 @@ function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Real, split:
     label = read(fid, "$(resolution)x$(resolution)x2_wn$(wavenumber)/label")
     close(fid)
 
+    # build and attach context to base version of dataset
+    amp = resolution == 512 ? 1.0 : 0.0 # context is zero for low resolution version
+    n = resolution
+    k = wavenumber
+    L = 2π
+    xx = ones(n) * LinRange(-L,L,n)' 
+    yy = LinRange(-L,L,n) * ones(n)'
+    context = @. amp * sin(2π * k * xx / L) * sin(2π *  k * yy / L)
+    context = context[:,:,:,:]
+    context = permutedims(context, (1, 2, 4, 3))
+    context = repeat(context, inner=(1, 1, 1, size(features)[end]))
+    features = cat(features, context, dims=3)
+
     # splitting
     if split == :train
         features, _ = MLUtils.splitobs(features, at=0.8)
     elseif split == :test
         _, features = MLUtils.splitobs(features, at=0.8)
     end
-    
     # useful side information
     metadata = Dict{String,Any}()
     metadata["n_observations"] = size(features)[end]
 
-    return Turbulence2DContext(metadata, split, resolution, Tx.(features), Tx.(label))
+    return Turbulence2DContext(metadata, split, resolution, Tx.(features))
+end
+
+function Turbulence2DContext(Tx::Type, resolution::Int, split::Symbol; dir=nothing)
+    features = []
+    wavenumbers = resolution == 512 ? [1.0, 2.0, 4.0, 8.0, 16.0] : [1.0]
+    for k in wavenumbers
+        push!(features, Turbulence2DContext(Tx, resolution, k, split).features)
+    end
+    features = cat(features..., dims=4)
+
+    # useful side information
+    metadata = Dict{String,Any}()
+    metadata["n_observations"] = size(features)[end]
+
+    return Turbulence2DContext(metadata, split, resolution, Tx.(features))
 end
