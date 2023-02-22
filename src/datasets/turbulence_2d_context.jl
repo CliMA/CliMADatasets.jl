@@ -32,7 +32,7 @@ Turbulence2DContext(Tx::Type; kws...) = Turbulence2DContext(; Tx, kws...)
 
 function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Real, split::Symbol; dir=nothing)
     DEPNAME = "Turbulence2DContext"
-    HDF5FILE = "turbulence_2d_context.hdf5"
+    HDF5FILE = "turbulence_2d_with_context.hdf5"
 
     # checks
     @assert resolution ∈ [512, 64]
