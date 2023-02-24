@@ -56,7 +56,7 @@ using Test
         @test d.split == :test
         @test size(d.features)[3] == 3
         @test d.features isa Array{Float32}
-        @test size(d[:])[1:2] == (64, 64)
-        @test size(d[:])[4] == 16010
+        @test size(d[:])[1:2] == (512, 512)
+        @test size(d[:])[4] == 2000
     end    
 end
