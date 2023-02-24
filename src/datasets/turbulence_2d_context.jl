@@ -25,7 +25,7 @@ struct Turbulence2DContext <: MLDatasets.UnsupervisedDataset
     features::Array{}
 end
 
-Turbulence2DContext(; split=:train, resolution=512, wavenumber=1.0, Tx=Float32, dir=nothing) = Turbulence2DContext(Tx, resolution, wavenumber, split; dir)
+Turbulence2DContext(; split=:train, resolution=64, wavenumber=1.0, Tx=Float32, dir=nothing) = Turbulence2DContext(Tx, resolution, wavenumber, split; dir)
 Turbulence2DContext(split::Symbol; kws...) = Turbulence2DContext(; split, kws...)
 Turbulence2DContext(resolution::Symbol; kws...) = Turbulence2DContext(; resolution, kws...)
 Turbulence2DContext(Tx::Type; kws...) = Turbulence2DContext(; Tx, kws...)
@@ -45,7 +45,7 @@ function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Real, split:
     # local path extraction
     features_path = MLDatasets.datafile(DEPNAME, HDF5FILE, dir)
 
-    # loading
+    # loadingn
     fid = h5open(features_path, "r")
     features = read(fid, "$(resolution)x$(resolution)x2_wn$(wavenumber)/fields")
     label = read(fid, "$(resolution)x$(resolution)x2_wn$(wavenumber)/label")
@@ -56,8 +56,8 @@ function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Real, split:
     n = resolution
     k = wavenumber
     L = 2π
-    xx = ones(n) * LinRange(-L,L,n)' 
-    yy = LinRange(-L,L,n) * ones(n)'
+    xx = ones(n) * LinRange(0,L,n)' 
+    yy = LinRange(0,L,n) * ones(n)'
     context = @. amp * sin(2π * k * xx / L) * sin(2π *  k * yy / L)
     context = context[:,:,:,:]
     context = permutedims(context, (1, 2, 4, 3))
@@ -77,7 +77,7 @@ function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Real, split:
     return Turbulence2DContext(metadata, split, resolution, Tx.(features))
 end
 
-function Turbulence2DContext(Tx::Type, resolution::Int, split::Symbol; dir=nothing)
+function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Symbol, split::Symbol; dir=nothing)
     features = []
     wavenumbers = resolution == 512 ? [1.0, 2.0, 4.0, 8.0, 16.0] : [1.0]
     for k in wavenumbers

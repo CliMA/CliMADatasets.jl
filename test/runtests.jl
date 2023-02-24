@@ -52,10 +52,11 @@ using Test
         @test d.features isa Array{Float32}
         @test size(d[:])[1:2] == (512, 512)
 
-        d = Turbulence2DContext(split=:test, resolution=64)
+        d = Turbulence2DContext(split=:test, resolution=512, wavenumber=:all)
         @test d.split == :test
         @test size(d.features)[3] == 3
         @test d.features isa Array{Float32}
         @test size(d[:])[1:2] == (64, 64)
+        @test size(d[:])[4] == 16010
     end    
 end
