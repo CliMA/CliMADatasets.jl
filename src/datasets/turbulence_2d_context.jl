@@ -65,8 +65,10 @@ function Turbulence2DContext(Tx::Type, resolution::Int, wavenumber::Real, split:
     features = cat(features, context, dims=3)
 
     # take only a fraction of the dataset
-    new_nobs = Int(floor(size(features)[end] * fraction))
-    features = features[:,:,:,1:new_nobs]
+    nobs = size(features)[end]
+    nobs_half = div(nobs, 2)
+    obs = nobs_half:Int(1/fraction):nobs
+    features = features[:,:,:,obs]
 
     # splitting
     if split == :train

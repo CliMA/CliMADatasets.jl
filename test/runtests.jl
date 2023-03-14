@@ -57,6 +57,6 @@ using Test
         @test size(d.features)[3] == 3
         @test d.features isa Array{Float32}
         @test size(d[:])[1:2] == (512, 512)
-        @test size(d[:])[4] == 1000
+        @test size(d[:])[4] == 500
     end    
 end
