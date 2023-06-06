@@ -58,5 +58,14 @@ using Test
         @test d.features isa Array{Float32}
         @test size(d[:])[1:2] == (512, 512)
         @test size(d[:])[4] == 500
-    end    
+    end
+    
+    @testset "CorrelatedOU2D" begin
+        d = CorrelatedOU2D(:train; f = 0.5)
+        @test d.split == :train
+        @test d.resolution == 32
+        @test size(d[:])[1:2] == (32, 32)
+        @test d.features isa Array{Float32}
+        @test size(d.features)[end] == Int((1e6-100)/2*0.8)
+    end
 end
