@@ -8,7 +8,8 @@ function __init__correlated_ou_2d()
         Authors: Climate Modeling Alliance
         Website: N/A
         """,
-        "https://caltech.box.com/shared/static/wul8b4ejb07ftj43p1guxmeso2d4mhja.hdf5",
+        ["https://caltech.box.com/shared/static/wul8b4ejb07ftj43p1guxmeso2d4mhja.hdf5", 
+        "https://caltech.box.com/shared/static/4k9wvwt8w1g1b94nrp6cn7ppgxhxk72z.hdf5"],
     ))
 end
 
@@ -35,13 +36,14 @@ Creates the CorrelatedOU2D dataset given
 - Tx: the float type. The dataset was created using Float32
 - resolution: the resolution of the images in the dataset (only 32 is supported currently.)
 """
-function CorrelatedOU2D(split::Symbol; f = 1.0, Tx = Float32, resolution = 32,)
-    DEPNAME = "CorrelatedOU2D"
-    HDF5FILE = "grf.hdf5"
-
+function CorrelatedOU2D(split::Symbol; f = 1.0, dt_save = 0.25, Tx = Float32, resolution = 32,)
     # checks
     @assert resolution ∈ [32,]
     @assert split ∈ [:train, :test]
+    @assert dt_save ∈ [1.0, 0.25]
+
+    DEPNAME = "CorrelatedOU2D"
+    HDF5FILE = dt_save == 1.0 ? "grf.hdf5" : "grf_dt_save_eq_dt.hdf5"
 
     # local path extraction
     features_path = MLDatasets.datafile(DEPNAME, HDF5FILE, nothing)
@@ -53,7 +55,7 @@ function CorrelatedOU2D(split::Symbol; f = 1.0, Tx = Float32, resolution = 32,)
         σ = 1.0
         θ = 0.5
         dt = 0.25
-        dt_save = 1.0
+        dt_save = dt_save
         # Autocorrelation time: specific to dataset
         τ = 100.0
         features = read(fid, string("res_32x32_$σ","_$θ","_$dt","_$dt_save"))
