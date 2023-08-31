@@ -68,4 +68,14 @@ using Test
         @test d.features isa Array{Float32}
         @test size(d.features)[end] == Int((1e6-100)/2*0.8)
     end
+
+    @testset "CorrelatedOU1D" begin
+        d = CorrelatedOU1D(:test; f = 0.1)
+        @test d.split == :test
+        @test d.n_pixels == 64
+        @test d.n_time == 64
+        @test size(d[:])[1:2] == (64, 64)
+        @test d.features isa Array{Float32}
+        @test size(d.features)[end] == Int(3e4*0.1*0.2)
+    end
 end
