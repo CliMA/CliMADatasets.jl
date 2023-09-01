@@ -1,7 +1,7 @@
 name = "CliMADatasets"
 uuid = "49523d62-8978-4391-abdd-b8467d4505ae"
 authors = ["Climate Modeling Alliance"]
-version = "0.5.0"
+version = "0.6.0"
 
 [deps]
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
@@ -13,8 +13,8 @@ MLUtils = "f1d291b0-491e-4a28-83b9-f70985020b54"
 DataDeps = "0.7"
 HDF5 = "0.16"
 MLDatasets = "0.7"
-MLUtils = "0.2"
-julia = "1.7, 1.8"
+MLUtils = "0.2, 0.4"
+julia = "1.7, 1.8, 1.9"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
