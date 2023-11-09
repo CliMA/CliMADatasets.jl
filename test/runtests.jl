@@ -78,4 +78,17 @@ using Test
         @test d.features isa Array{Float32}
         @test size(d.features)[end] == Int(3e4*0.1*0.2)
     end
+
+    @testset "Giorgini2D" begin
+        for res in [8, 16, 32]
+            for nl in [:strong, :medium, :weak]
+                d = Giorgini2D(:train; f = 0.5, resolution = res, nonlinearity = nl)
+                @test d.split == :train
+                @test d.resolution == res
+                @test size(d[:])[1:2] == (res, res)
+                @test d.features isa Array{Float32}
+                @test size(d.features)[end] == 12000 # 80% training data of 50% of total dataset
+            end
+        end
+    end
 end
