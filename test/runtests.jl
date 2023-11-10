@@ -100,7 +100,7 @@ using Test
                 @test d.resolution == res
                 @test size(d[:])[1:2] == (res, res)
                 @test d.features isa Array{Float32}
-                @test size(d.features)[end] == 12000 # 80% training data of 50% of total dataset
+                @test size(d.features)[end] == 12061 # 80% training data of 50% of total dataset
             end
         end
     end

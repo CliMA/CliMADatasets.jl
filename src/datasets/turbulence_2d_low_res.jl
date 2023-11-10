@@ -9,7 +9,7 @@ function __init__turbulence_2d_low_res()
         Authors: Climate Modeling Alliance
         Website: N/A
         """,
-        "https://caltech.box.com/shared/static/4kn6b5g68chgti5adho05jyan5184opc.hdf5",
+        "https://caltech.box.com/shared/static/2vysrni7qfuk79azvl1d7aybbqgqacfw.hdf5",
     ))
 end
 
@@ -50,7 +50,7 @@ function Turbulence2DLowRes(split::Symbol; f = 1.0, Tx = Float32, resolution = 3
     features_path = MLDatasets.datafile(DEPNAME, HDF5FILE, nothing)
 
     # loading
-    N = resolution
+    n = resolution
     fid = h5open(features_path, "r")
     if nonlinearity == :weak
         τc = 1.0
@@ -90,7 +90,7 @@ function Turbulence2DLowRes(split::Symbol; f = 1.0, Tx = Float32, resolution = 3
     
     n_observations = size(features)[end]
     n_data = Int(round(n_observations*f))
-    features = features[:,:,1:1:n_data]
+    features = features[:,:,:,1:1:n_data]
     
     # splitting
     if split == :train
