@@ -91,4 +91,17 @@ using Test
             end
         end
     end
+
+    @testset "Turbulence2DLowRes" begin
+        for res in [32]
+            for nl in [:strong, :medium, :weak]
+                d = Turbulence2DLowRes(:train; f = 0.5, resolution = res, nonlinearity = nl)
+                @test d.split == :train
+                @test d.resolution == res
+                @test size(d[:])[1:2] == (res, res)
+                @test d.features isa Array{Float32}
+                @test size(d.features)[end] == 12000 # 80% training data of 50% of total dataset
+            end
+        end
+    end
 end
