@@ -104,4 +104,15 @@ using Test
             end
         end
     end
+
+    @testset "KuramotoSivashinsky1D" begin
+        d = KuramotoSivashinsky1D(:train; f = 0.5)
+        @test d.split == :train
+        @test d.n_pixels == d.n_time == 128
+        @test size(d[:])[1:2] == (res, res)
+        @test d.features isa Array{Float32}
+        @test size(d.features)[end-1] = 1
+        @test size(d.features)[end] == 11997 # 80% training data of 50% of total dataset
+    end
+    
 end
