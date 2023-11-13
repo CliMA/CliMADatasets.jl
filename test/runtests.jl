@@ -115,4 +115,12 @@ using Test
         @test size(d.features)[end] == 11997 # 80% training data of 50% of total dataset
     end
     
+    @testset "MNIST3D" begin
+        res = 64
+        d = MNIST3D(:train; f = 0.5)
+        @test d.split == :train
+        @test size(d[:])[1:2] == (res, res)
+        @test d.features isa Array{Float32}
+        @test size(d.features)[end] == 4000 # 80% training data of 50% of total dataset
+    end
 end
