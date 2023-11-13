@@ -12,6 +12,7 @@ include("datasets/turbulence_2d_context.jl")
 include("datasets/correlated_ou_2d.jl")
 include("datasets/correlated_ou_1d.jl")
 include("datasets/giorgini_2d.jl")
+include("datasets/ks_1d.jl")
 
 export CelebAHQ
 export Turbulence2D
@@ -29,6 +30,7 @@ function __init__()
     __init__correlated_ou_2d()
     __init__correlated_ou_1d()
     __init__giorgini_2d()
+    __init__ks_1d()
 end
 
 end #module
