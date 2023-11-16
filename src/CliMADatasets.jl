@@ -2,6 +2,7 @@ module CliMADatasets
 
 using DataDeps
 using HDF5
+using NPZ
 using MLDatasets
 using MLUtils
 
@@ -13,6 +14,7 @@ include("datasets/correlated_ou_2d.jl")
 include("datasets/correlated_ou_1d.jl")
 include("datasets/giorgini_2d.jl")
 include("datasets/ks_1d.jl")
+include("datasets/mnist_3d.jl")
 
 export CelebAHQ
 export Turbulence2D
@@ -21,6 +23,7 @@ export Turbulence2DContext
 export CorrelatedOU2D
 export CorrelatedOU1D
 export Giorgini2D
+export MNIST3D
 
 function __init__()
     __init__celeba_hq()
@@ -31,6 +34,7 @@ function __init__()
     __init__correlated_ou_1d()
     __init__giorgini_2d()
     __init__ks_1d()
+    __init__mnist_3d()
 end
 
 end #module
