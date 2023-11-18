@@ -24,6 +24,7 @@ export CorrelatedOU2D
 export CorrelatedOU1D
 export Giorgini2D
 export MNIST3D
+export KuramotoSivashinsky1D
 
 function __init__()
     __init__celeba_hq()
