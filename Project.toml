@@ -1,7 +1,7 @@
 name = "CliMADatasets"
 uuid = "49523d62-8978-4391-abdd-b8467d4505ae"
 authors = ["Climate Modeling Alliance"]
-version = "0.9.0"
+version = "0.10.0"
 
 [deps]
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
